@@ -1,0 +1,114 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# lab_00
+# author: Joshua Young
+# date: September 5, 2025
+# overview: attempt at lab00 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# close all, clear all
+rm(list=ls())
+graphics.off()
+
+# set the working directory
+setwd("/Users/joshuayoung/Desktop/Biostats/Labs/Lab00")
+
+# read in the dataset from file
+yale = read.csv("/Users/joshuayoung/Desktop/Biostats/Labs/Lab00/yale_athletics2025.csv")
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 0. how many observations are there in the sport of Lacrosse?
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# approach a: tabulate by sport
+table(yale$Sport)
+# from visual inspection: 701 observations
+
+# approach b: subset data-frame and count rows
+lax_df = yale[which(yale$Sport=="Lacrosse"),]
+nlax = nrow(lax_df)
+print(paste(nlax,"lacrosse observations"))
+# yields 701 observations in lacrosse
+
+# approach c: subset to lacrosse players and count length
+lax_vect = subset(yale,subset=yale$Sport=="Lacrosse")
+nlax = length(lax_vect$Name)
+print(paste(nlax,"lacrosse observations"))
+# yields 701 observations in lacrosse
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 1. What sport is played by the student-athlete in the 535th row of this dataset?
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# extract a value from a specific row number and column name
+answer1 = yale[545, "Sport"]
+answer1
+print(paste(answer1, "is the sport played by the student-athlete in the 535th row"))
+#yields basketball as the sport played
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 2. Consider the student-athletes listed in the 2nd, 20th, 200th, and 2000th positions within this data-frame. Who among these four student-athletes is the tallest? (name, please)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#create a new df with student-athletes of interest
+yale_modified <- yale[c(2,20,200,2000), ]
+#yields a df with the 2,20,200, and 20000 entries
+
+#use the which.max function applied to the height column
+answer2 = yale_modified[which.max(yale_modified$Height), ]
+#yields the tallest athlete information
+
+#print just the name
+print(paste(answer2$Name, "is the tallest of this student-athlete subset"))
+# Yields Eric Shultz as the tallest student-athlete in this subset
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 3. How many different student athletes played baseball
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#create a new dataframe with just baseball players
+baseball_only_df <- yale[yale$Sport == "Baseball", ]
+#yields a filtered dataframe with just Sport = baseball
+
+#use the unqiue function to ensure no duplicates are present and length function to return just the number of student-athletes
+answer3 = length(unique(baseball_only_df$Name))
+answer3
+print(paste(answer3, "different student athletes played baseball"))
+#returns 143 different baseball players in our dataset
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 4. How many baseball players played for exactly four years?
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#build off of the same baseball only dataframe from problem 3
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 5. How many student athletes are taller than 6 feet
+# assumption about dataset: Height values are reported in inches
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# calculate the number of inches corresponding to the 6 feet cutoff
+6 * 12
+#yields 72 inches as the cutoff value for the height column
+
+# create df of > 6 feet tall players and find number of unique names 
+tallplayers = yale[yale$Height > 72, ]
+answer5 = length(unique(tallplayers$Name))
+print(paste(answer5, "student-athletes are taller than 6 feet"))
+#answer yields 786 student-athletes are taller than 6 feet"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 6. What is the proportion of student-athletes over six-feet tall, by team (i.e. what proportion of Soccer players are over six feet, what proportion of Baseball players, etcetera).
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+
+
+
+
+
+
+
