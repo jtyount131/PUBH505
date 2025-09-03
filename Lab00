@@ -80,8 +80,12 @@ print(paste(answer3, "different student athletes played baseball"))
 # 4. How many baseball players played for exactly four years?
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-# hoping to get some help with this problem
+# extract only the baseball row
+baseball <- yale[yale$Sport == "Baseball", ]
+# create a table of the names of baseball players and years played
+table(baseball$Name)
+sum(table(baseball$Name) == 4)
+# 78 baseball players played for exactly 4 years
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
