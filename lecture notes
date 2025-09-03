@@ -1,0 +1,96 @@
+################################################
+# Lecture 1 + 2 notes
+# Joshua Young
+#dates: august 29, 2025
+################################################
+
+yale = read.csv("/Users/joshuayoung/Desktop/Biostats/Primer/yale_athletics2025.csv")
+yale
+
+setwd("/Users/joshuayoung/Desktop/Biostats/Primer")
+dir()
+yale = read.csv("yale_athletics2025.csv")
+yale
+
+head(yale) #shows a snapshot of the dataset... default to first 6 rows
+head(yale,3) #shows a snapshot of the dataset... with 3 rows
+?head #question mark before command retrieves the command description
+
+tail(yale) #shows a snapshot of the bottom 6 rows
+
+# find the set of variables in CURRENT WD
+ls()
+
+# find item set in a specific place
+dir("/Users/joshuayoung/Desktop/Biostats")
+
+yale(1) #... returns an error since yale is not a function
+yale[1] #... returns the first column since since Yale is a data type
+
+num = 11 #defining a variable
+ls() #we can see num is added to our list of variables
+num #returns 11 in concole
+my_num = num * 3
+my_num #
+
+rm(a) #can remove a specific variable
+ls() #a should now be removed from the directory
+
+#strings are lesical characters that are not opperated
+v = "my name is Josh" #this is a string
+v
+class(v) #returns v is a character
+
+#some basics on plots
+plot(c(1,2,3,4))
+plot(c(1,2,3,4), xlab = "", ylab = "") #removes or dictates the axis labels
+plot(c(1,2,3,4), xlab = "x axis", ylab = "y axis") #dictates the axis labels
+plot(c(1,2,3,4), main = "title", xlab = "x axis", ylab = "y axis") #main adds a title
+
+#nesting
+mean(c(1,2,3))
+mean(c(1,2,3,4,6))
+round(mean(c(1,2,3,4,6)))
+barplot(round(mean(c(1,2,3,4,6)))) # nesting compiles from inside out
+
+#indexing to find the value at a position
+v = c(8,1,4,2,9,-4,3)
+v[3] #returns the third item, so 4
+yale$Name[3]
+class(v) # should return that v is numeric
+
+################################################
+# Lecture 2-3 notes
+# Joshua Young
+#dates: September 03, 2025
+################################################
+# Data types can be either numerical or categorical
+# Numerical can be discrete (you can count it)... fractions of discrete values is still discrete; need not be a whole number... unit is object of measurement
+# Numerical can be continuous (related to a measurement process)... your height falls on a continuum... units describe the thing we measure
+# Categorical can be nominal (any designation where order does not matter)
+# Categorical can be ordinal (any designation where order does matter)
+# Categorical can be Rank (elements ordered within a single category)... if a new person is added, it has the potential to change the order... adding a data point influences other data points
+
+# class function is a diagnostic tool to know your data type
+
+class(yale$Year)
+#returns integer since vector contains all numbers, no decimals
+class(yale$Height)
+# if one height is reported as a decimal, will return 'numeric'
+
+char = c("203", "208")
+class(char)
+#returns character since data points are in quotes
+
+#ordering:
+table(yale$Class)
+#returns data alpha-numerically 
+
+#use this code to order dataset as you wish
+yale$Class = ordered(yale$Class, levels = c("Fy.", "So.", "Jr.", "Sr.", "Gr."))
+class(yale$Class)
+levels(yale$Class)
+
+#The mean
+#an abstraction from your data... not necessarily in your dataset and represent something about it
+
