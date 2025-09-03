@@ -41,7 +41,7 @@ print(paste(nlax,"lacrosse observations"))
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # extract a value from a specific row number and column name
-answer1 = yale[545, "Sport"]
+answer1 = yale[535, "Sport"]
 answer1
 print(paste(answer1, "is the sport played by the student-athlete in the 535th row"))
 #yields basketball as the sport played
@@ -80,7 +80,9 @@ print(paste(answer3, "different student athletes played baseball"))
 # 4. How many baseball players played for exactly four years?
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#build off of the same baseball only dataframe from problem 3
+
+# hoping to get some help with this problem
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 5. How many student athletes are taller than 6 feet
@@ -101,14 +103,48 @@ print(paste(answer5, "student-athletes are taller than 6 feet"))
 # 6. What is the proportion of student-athletes over six-feet tall, by team (i.e. what proportion of Soccer players are over six feet, what proportion of Baseball players, etcetera).
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# How many unique sports are there to calculate porportion
+unique(yale$Sport)
+# returns the names of the 6 unique sports 
 
+# proportion for baseball
+baseball_only_df <- yale[yale$Sport == "Baseball", ]
+baseball_over6 <- baseball_only_df[baseball_only_df$Height > 72, ]
+baseball_proportion = length(unique(baseball_over6$Name))/length(unique(baseball_only_df$Name))
+print(paste(baseball_proportion, "is the proportion of baseball players over 6-feet"))                
+# returns 0.54 as the proportion of baseball players over 6-feet
 
+# proportion for basketball
+basketball_only_df <- yale[yale$Sport == "Basketball", ]
+basketball_over6 <- basketball_only_df[basketball_only_df$Height > 72, ]
+basketball_proportion = length(unique(basketball_over6$Name))/length(unique(basketball_only_df$Name))
+print(paste(basketball_proportion, "is the proportion of basketball players over 6-feet"))                
+# returns 0.93 as the proportion of basketball players over 6-feet
 
+# proportion for Football
+football_only_df <- yale[yale$Sport == "Football", ]
+football_over6 <- football_only_df[football_only_df$Height > 72, ]
+football_proportion = length(unique(football_over6$Name))/length(unique(football_only_df$Name))
+print(paste(football_proportion, "is the proportion of football players over 6-feet"))                
+# returns 0.73 as the proportion of football players over 6-feet
 
+# proportion for Hockey
+hockey_only_df <- yale[yale$Sport == "Hockey", ]
+hockey_over6 <- hockey_only_df[hockey_only_df$Height > 72, ]
+hockey_proportion = length(unique(hockey_over6$Name))/length(unique(hockey_only_df$Name))
+print(paste(hockey_proportion, "is the proportion of hockey players over 6-feet"))                
+# returns 0.40 as the proportion of hockey players over 6-feet
 
+# proportion for Lacrosse
+lacrosse_only_df <- yale[yale$Sport == "Lacrosse", ]
+lacrosse_over6 <- lacrosse_only_df[lacrosse_only_df$Height > 72, ]
+lacrosse_proportion = length(unique(lacrosse_over6$Name))/length(unique(lacrosse_only_df$Name))
+print(paste(lacrosse_proportion, "is the proportion of lacrosse players over 6-feet"))                
+# returns 0.43 as the proportion of lacrosse players over 6-feet
 
-
-
-
-
-
+# proportion for Soccer
+soccer_only_df <- yale[yale$Sport == "Soccer", ]
+soccer_over6 <- soccer_only_df[soccer_only_df$Height > 72, ]
+soccer_proportion = length(unique(soccer_over6$Name))/length(unique(soccer_only_df$Name))
+print(paste(soccer_proportion, "is the proportion of soccer players over 6-feet"))                
+# returns 0.38 as the proportion of soccer players over 6-feet
