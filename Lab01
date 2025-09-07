@@ -1,0 +1,116 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# lab_01_Section05_JoshuaYoung
+# author: Joshua Young
+# date: September 10, 2025
+# overview: attempt at lab01
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# close all, clear all
+rm(list=ls())
+graphics.off()
+
+# set the working directory
+setwd("/Users/joshuayoung/Desktop/Biostats/Labs/Lab01")
+list.files()
+
+##############################
+# 1) read in an excel data file
+##############################
+install.packages("readxl")
+library(readxl)
+
+#create a variable for the data, skipping over the first 2 rows
+vaxx <- read_excel("data.xlsx", skip = 2)
+class(vaxx)
+#returns the dataframe with class description: tbl_df, tbl, and data.frame
+
+#DELIVERABLE 1: convert to just a dataframe
+vaxx_df <- as.data.frame(vaxx)
+head(vaxx_df)
+#yields a vaxx dataframe with the first 6 lines as a head
+
+#DELIVERABLE 2: print readout that vaxx_df is indeed a df
+class(vaxx_df)
+print(paste(class(vaxx_df), "is the class of vaxx_df"))
+#yields data.frame is the class of vaxx_df
+
+##############################
+# 2) 
+##############################
+
+#inspect the class of the first column
+class(vaxx_df$`Facility Number`)
+print(paste(class(vaxx_df$`Facility Number`), "is the class of Facility Number"))
+#yields numerical as the class of facility number
+
+#inspect the class of last column
+class(vaxx_df$`Varicella`)
+print(paste(class(vaxx_df$`Varicella`), "is the class of Facility Number"))
+#yields character as the class of varicella
+
+# DELIVERABLE: Ensure columns 6 through 11 are numeric
+vaxx_df[, 6:11] <- lapply(vaxx_df[, 6:11], function(x) as.numeric(x))
+print(paste(class(vaxx_df$`Facility Number`), "is the class of Facility Number"))
+print(paste(class(vaxx_df$`Varicella`), "is the class of Facility Number"))
+# yields both facility number and varicella as numeric
+
+# round columns 6-11 to 3 decimal places
+vaxx_df[, 6:11] <- lapply(vaxx_df[, 6:11], function(x) round(x, 3))
+# yields a data set with columns 6-11 rounded to 3 decimal places
+
+##############################
+# 3) 
+##############################
+
+# create a visual as a histogram
+hist(vaxx_df$MMR,
+     main = "Histogram of MMR vaccination Rates",
+     xlab = "Vaccination Rate Bins",
+     ylab = "Facility Frequency",
+     col = "black",
+     breaks = 20)  
+# yields a visual for further analysis
+
+##############################
+# 4) 
+##############################
+
+# report the central tendancies of MMR vaccination rates
+mean <- mean(vaxx_df$MMR, na.rm=TRUE)
+median <- median(vaxx_df$MMR, na.rm=TRUE)
+sd <- sd(vaxx_df$MMR, na.rm=TRUE)
+min <- min(vaxx_df$MMR, na.rm=TRUE)
+max <- max(vaxx_df$MMR, na.rm=TRUE)
+
+print(paste("MMR vaccination coverage has a mean of", mean,
+            "a median of", median,
+            "a standard deviation of", sd,
+            "The min is",min, "and the max is", max))
+# yields descriprtive statistics and central tendancy values for MMR vaccination rates
+
+##############################
+# 5) 
+##############################
+
+# clean the df of NA values and calculate proportion
+vaxx_df_clean <- vaxx_df[!is.na(vaxx_df$MMR), ]
+proportion <- sum(vaxx_df_clean$MMR >= 0.95) / nrow(vaxx_df_clean)
+print(paste(proportion, "is the proportion of herd immunity facilities"))
+# yields  0.517 as the proportion of schools with herd immunity
+
+##############################
+# 6) 
+##############################
+
+# how many unique values are in the county column?
+length(unique(vaxx_df$County))
+print(paste(length(unique(vaxx_df$County)), "out of 254 counties (Texas Association of Counties, 2025) have data reported"))
+# 249 out of 254 counties (Texas Association of Counties, 2025) have data reported. I interpret this as a trustworth dataset that is well representative of the entire Texax kindergarten population
+
+
+
+
+
+
+
+
