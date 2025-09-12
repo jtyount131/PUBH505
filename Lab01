@@ -1,8 +1,8 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # lab_01_Section05_JoshuaYoung
 # author: Joshua Young
-# date: September 10, 2025
-# overview: attempt at lab01
+# date: September 12, 2025
+# overview: Final submission of lab01
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # close all, clear all
@@ -20,12 +20,12 @@ install.packages("readxl")
 library(readxl)
 
 #create a variable for the data, skipping over the first 2 rows
-vaxx <- read_excel("data.xlsx", skip = 2)
+vaxx <- read_excel("2023-2024_School_Vaccination_Coverage_Levels_Kindergarten.xlsx", skip = 2)
 class(vaxx)
 #returns the dataframe with class description: tbl_df, tbl, and data.frame
 
 #DELIVERABLE 1: convert to just a dataframe
-vaxx_df <- as.data.frame(vaxx)
+vaxx_df <- data.frame(vaxx)
 head(vaxx_df)
 #yields a vaxx dataframe with the first 6 lines as a head
 
@@ -39,24 +39,28 @@ print(paste(class(vaxx_df), "is the class of vaxx_df"))
 ##############################
 
 #inspect the class of the first column
-class(vaxx_df$`Facility Number`)
-print(paste(class(vaxx_df$`Facility Number`), "is the class of Facility Number"))
+class(vaxx_df$Facility.Number)
+print(paste(class(vaxx_df$Facility.Number), "is the class of Facility Number"))
 #yields numerical as the class of facility number
 
 #inspect the class of last column
-class(vaxx_df$`Varicella`)
-print(paste(class(vaxx_df$`Varicella`), "is the class of Facility Number"))
+class(vaxx_df$Varicella)
+print(paste(class(vaxx_df$Varicella), "is the class of Varicella"))
 #yields character as the class of varicella
 
 # DELIVERABLE: Ensure columns 6 through 11 are numeric
-vaxx_df[, 6:11] <- lapply(vaxx_df[, 6:11], function(x) as.numeric(x))
-print(paste(class(vaxx_df$`Facility Number`), "is the class of Facility Number"))
-print(paste(class(vaxx_df$`Varicella`), "is the class of Facility Number"))
+vaxx_df[,6] = round(as.numeric(vaxx_df[,6]), 3)
+vaxx_df[,7] = round(as.numeric(vaxx_df[,7]), 3)
+vaxx_df[,8] = round(as.numeric(vaxx_df[,8]), 3)
+vaxx_df[,9] = round(as.numeric(vaxx_df[,9]), 3)
+vaxx_df[,10] = round(as.numeric(vaxx_df[,10]), 3)
+vaxx_df[,11] = round(as.numeric(vaxx_df[,11]), 3)
+# forces columns 6-11 to numeric and rounds them to 3 decimal places
+
+print(paste(class(vaxx_df$Facility.Number), "is the class of Facility Number"))
+print(paste(class(vaxx_df$Varicella), "is the class of Varicella"))
 # yields both facility number and varicella as numeric
 
-# round columns 6-11 to 3 decimal places
-vaxx_df[, 6:11] <- lapply(vaxx_df[, 6:11], function(x) round(x, 3))
-# yields a data set with columns 6-11 rounded to 3 decimal places
 
 ##############################
 # 3) 
@@ -64,11 +68,10 @@ vaxx_df[, 6:11] <- lapply(vaxx_df[, 6:11], function(x) round(x, 3))
 
 # create a visual as a histogram
 hist(vaxx_df$MMR,
-     main = "Histogram of MMR vaccination Rates",
+     main = "Histogram of MMR vaccination Rates among kindergarteners",
      xlab = "Vaccination Rate Bins",
-     ylab = "Facility Frequency",
-     col = "black",
-     breaks = 20)  
+     ylab = "Frequency",
+     col = "black")
 # yields a visual for further analysis
 
 ##############################
@@ -76,17 +79,19 @@ hist(vaxx_df$MMR,
 ##############################
 
 # report the central tendancies of MMR vaccination rates
-mean <- mean(vaxx_df$MMR, na.rm=TRUE)
-median <- median(vaxx_df$MMR, na.rm=TRUE)
-sd <- sd(vaxx_df$MMR, na.rm=TRUE)
-min <- min(vaxx_df$MMR, na.rm=TRUE)
-max <- max(vaxx_df$MMR, na.rm=TRUE)
+mean_MMR = mean(vaxx_df$MMR, na.rm=TRUE)
+median_MMR = median(vaxx_df$MMR, na.rm=TRUE)
+quantile_MMR = quantile(vaxx_df$MMR, na.rm=TRUE)
 
-print(paste("MMR vaccination coverage has a mean of", mean,
-            "a median of", median,
-            "a standard deviation of", sd,
-            "The min is",min, "and the max is", max))
-# yields descriprtive statistics and central tendancy values for MMR vaccination rates
+sd_MMR = sd(vaxx_df$MMR, na.rm=TRUE)
+min_MMR = min(vaxx_df$MMR, na.rm=TRUE)
+max_MMR = max(vaxx_df$MMR, na.rm=TRUE)
+
+print(paste("MMR vaccination coverage has a mean of", mean_MMR,
+            ", a median of", median_MMR, 
+            ", a standard deviation of", sd_MMR,
+            ". The min is",min_MMR, ", and the max is", max_MMR))
+# yields a descriptive statistics statement and central tendancy values for MMR vaccination rates
 
 ##############################
 # 5) 
@@ -99,15 +104,15 @@ print(paste(proportion, "is the proportion of herd immunity facilities"))
 # yields  0.517 as the proportion of schools with herd immunity
 
 ##############################
-# 6) 
+# 6)
 ##############################
 
 # how many unique values are in the county column?
 length(unique(vaxx_df$County))
-print(paste(length(unique(vaxx_df$County)), "out of 254 counties (Texas Association of Counties, 2025) have data reported"))
+print(paste(length(unique(vaxx_df$County)), "out of 254 counties (Texas Association of Counties, 2025) have data reported, indicating a well-represnted dataset"))
 # 249 out of 254 counties (Texas Association of Counties, 2025) have data reported. I interpret this as a trustworth dataset that is well representative of the entire Texax kindergarten population
 
-
+# I view this as a trustworthy dataset based on the fact that there is a vast and wide county-level representation of schools. There doesn't seem to be an area in Texas that is heavily lacking data
 
 
 
