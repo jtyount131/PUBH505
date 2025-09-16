@@ -1,0 +1,101 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Lab02_Section05_YoungJoshua.R
+# author: Joshua Young
+# date: Sept 17, 2025
+# overview: pre-lab attempt at lab 02
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#####################
+# 0)
+#####################
+# close all, clear all
+graphics.off()
+rm(list=ls())
+# set the working directory 
+setwd("/Users/joshuayoung/Desktop/Biostats/Labs/Lab01")
+# declare file for reading
+read_file="2023-2024_School_Vaccination_Coverage_Levels_Kindergarten.xlsx"
+# load library for read_excel
+library(readxl)
+# load in data-file, skipping first two lines
+vaxx=read_excel(read_file,skip=2)
+# enforce as data-frame
+vaxx=data.frame(vaxx)
+
+#####################
+# 1)
+#####################
+
+#force columns 6-11 as numeric
+class(vaxx$MMR)
+vaxx[, 6:11] <- sapply(vaxx[, 6:11], as.numeric)
+class(vaxx$MMR)
+#class of columns 6-11 is now numeric
+
+#round columns 6-11 to 3 decimal places
+vaxx[, 6:11] <- sapply(vaxx[, 6:11], round, 3)
+class(vaxx$MMR)
+# yields vaxx dataframe with columns 6-11 rounded to 3 decimal places
+#####################
+# 2)
+#####################
+
+# add a variable within vaxx called Herd that defaults all entries to 'no'
+vaxx$Herd = "no"
+vaxx$Herd[vaxx$MMR >= 0.95] = "Yes"
+print(table(vaxx$Herd))
+# prints a table of 813 schools without herd immunity and 865 schools with herd immunity
+
+#####################
+# 3)
+#####################
+
+#create a vector of counties in the cluster, create a column called cluster with "Out" as default, assign counties within cluster as "In"
+in_vals = c("Parmer", "Bailey", "Lamb", "Hale", "Cochran", "Hockley", "Lubbock", "Yoakum", "Terry", "Lynn", "Garza", "Gaines", "Dawson", "Borden", "Andrews", "Martin", "Ector", "Midland")
+vaxx$Cluster = "Out"
+vaxx$Cluster[vaxx$County %in% in_vals] <- "In"
+print(table(vaxx$Cluster))
+# Prints a table correctly showing 76 schools in the cluster and 1602 out of the cluster
+
+#####################
+# 4)
+#####################
+
+#calculate probability of herd immunity given being in the cluster
+pHerd_gIn = sum(vaxx$Cluster == "In" & vaxx$Herd == "Yes") / sum(vaxx$Cluster == "In")
+print(paste(round(as.numeric(pHerd_gIn), 3), "is the conditional probability of a school being Herd-Positive, given that the school is within the Measles Cluster."))
+# there is a 0.5 probability
+
+#calculate probability of herd immunity given being out the cluster
+pHerd_gOut = sum(vaxx$Cluster == "Out" & vaxx$Herd == "Yes") / sum(vaxx$Cluster == "Out")
+print(paste(round(as.numeric(pHerd_gOut), 3), "is the conditional probability of a school being Herd-Positive, given that the school is not within the cluster"))
+# 0.516 is the probability reported
+
+#####################
+# 5)
+#####################
+
+#calculate the odds of each condition
+oHerd_gIn = pHerd_gIn / (1- pHerd_gIn)
+oHerd_gOut = pHerd_gOut / (1- pHerd_gOut)
+#the Odds of Herd, given in is 1 and the odds of herd given out is 1.067
+
+# calculate odds ratio of being herd-immune given In, versus Out
+OR = oHerd_gIn/oHerd_gOut
+print(paste(round(as.numeric(OR), 3), "is the the OR of being herd-immune given In, versus Out"))
+# the odds ratio is 0.937
+
+#####################
+# 6) -- need help
+#####################
+
+#bring in relevant packages
+install.packages("epitools")
+library(epitools)
+#packages successfully installed
+
+#create table
+cntg_table = table(vaxx$Cluster, vaxx$Herd)
+print(cntg_table)
+oddsratio(cntg_table)
+#porper odds were calculated (1.00 and 1.067)
