@@ -36,13 +36,30 @@ class(vaxx$MMR)
 vaxx[, 6:11] <- sapply(vaxx[, 6:11], round, 3)
 class(vaxx$MMR)
 # yields vaxx dataframe with columns 6-11 rounded to 3 decimal places
+
+# remove three columns
+vaxx = vaxx[,-c(1,3,4)]
+# yields trimmed data table with columns removed
+
+#DELIVERABLE 1
+head(vaxx)
+# yields correct 6 row header
+
+#DELIVERABLE 2
+class(vaxx$Varicella)
+#correctly yields varicella as class numeric
+
 #####################
 # 2)
 #####################
 
-# add a variable within vaxx called Herd that defaults all entries to 'no'
-vaxx$Herd = "no"
+# add a variable within vaxx called Herd that defaults all entries to 'no' 
+vaxx$Herd = "No"
+# new column added with all values 'no'
+
+#overwrite entries with MMR >= 0.95 as "In" and print resulting table
 vaxx$Herd[vaxx$MMR >= 0.95] = "Yes"
+table(vaxx$Herd)
 print(table(vaxx$Herd))
 # prints a table of 813 schools without herd immunity and 865 schools with herd immunity
 
@@ -53,7 +70,9 @@ print(table(vaxx$Herd))
 #create a vector of counties in the cluster, create a column called cluster with "Out" as default, assign counties within cluster as "In"
 in_vals = c("Parmer", "Bailey", "Lamb", "Hale", "Cochran", "Hockley", "Lubbock", "Yoakum", "Terry", "Lynn", "Garza", "Gaines", "Dawson", "Borden", "Andrews", "Martin", "Ector", "Midland")
 vaxx$Cluster = "Out"
+table(vaxx$Cluster)
 vaxx$Cluster[vaxx$County %in% in_vals] <- "In"
+table(vaxx$Cluster)
 print(table(vaxx$Cluster))
 # Prints a table correctly showing 76 schools in the cluster and 1602 out of the cluster
 
@@ -94,8 +113,14 @@ install.packages("epitools")
 library(epitools)
 #packages successfully installed
 
-#create table
+#create table, reverse rows for proper calculation
 cntg_table = table(vaxx$Cluster, vaxx$Herd)
 print(cntg_table)
-oddsratio(cntg_table)
-#porper odds were calculated (1.00 and 1.067)
+OR = oddsratio(cntg_table)
+OR = oddsratio(cntg_table,rev="rows")$measure
+OR_final = round(OR[2,1],3)
+
+# DELIVERABLE
+print(paste(OR_final, "is the OR of being herd-immune given In, versus Out"))
+# yields 0.937 as the odds ratio - the same as was calcualted prior
+
