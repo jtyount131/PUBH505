@@ -1,0 +1,196 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Lab03_Section05_YoungJoshua.R
+# author: Joshua Young
+# date: Oct 3, 2025
+# overview: final attempt at lab 03
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+graphics.off()
+rm(list=ls())
+# set the working directory 
+setwd("/Users/joshuayoung/Desktop/Biostats/Labs/Lab03")
+
+#####################
+# 1)
+#####################
+
+#set the seed for sake of consistency
+set.seed(12345)
+
+# create rands variable
+rands = sapply(rep(10,5), rnorm)
+class(rands)
+dim(rands)
+#rands created successfully with class verified
+
+#compute mean and SD of rands
+mean = apply(rands,2,mean)
+sd = apply(rands,2,sd)
+# means and sd calculated and stored as variables
+
+#DELIVERABLE:
+print(paste("the means of the random sample is", mean))
+print(paste("the standard deviations of the random sample is", sd))
+#correctly reports the means and standard deviations for all 5 columns
+
+#####################
+# 2)
+#####################
+set.seed(505)
+
+# scale up rand with sample size = 100 and 1000 replications
+rands_scaleup = sapply(rep(100,1000),rnorm)
+mean_scaleup = apply(rands_scaleup,2,mean)
+sd_scaleup = apply(rands_scaleup,2,sd)
+# new means and sds generated to account for increase sample size and replications
+
+#create a tcritical value from given formula (alpha = 0.05)... apply tcrit to the CI formula given in the problem
+tcrit = qt(0.975, 99)
+lower_CI = mean_scaleup - tcrit*sd_scaleup/sqrt(100)
+upper_CI = mean_scaleup + tcrit*sd_scaleup/sqrt(100)
+# upper and lower bounds created 
+
+#find number of intervals that omit zero and sum
+intervals_zero = (lower_CI <= 0) & (upper_CI >= 0)
+omit_zero = sum(!intervals_zero)
+# sum tabulated
+
+#DELIBERABLE:
+print(paste("The number of 95% CI that are missing zero is", omit_zero))
+# yields 53
+
+#####################
+# 3)
+#####################
+
+#read in NTY powerty file
+nyc = read.csv("NYC_Poverty.csv")
+#successfully added to data
+
+#subset to just pretexincome column and rename to income
+nyc = nyc["PreTaxIncome_PU"]
+names(nyc) = "Income" 
+#data frame now has one column of incomes
+
+#create a histogram of pre-tax income
+hist(nyc$Income,
+     main = "Distribution of Pre-Tax Income",
+     xlab = "Income in USD")
+#histogram created
+
+#calculate mean and sd
+mean_income = round(mean(nyc$Income))
+sd_income = round(sd(nyc$Income))
+# mean = 90.8K and sd = 120K
+
+#calculate median and Q1 and Q3
+median_income = round(median(nyc$Income))
+Q1 = round(quantile(nyc$Income, 0.25, na.rm = TRUE))
+Q3 = round(quantile(nyc$Income, 0.75, na.rm = TRUE))
+#median and quartiles created
+
+# DELIVERABLE:
+print(paste("The mean income is $",mean_income,
+            " with a standard deviation of $", sd_income))
+# mean income is $ 90843 with a standard deviation of $ 120090
+
+print(paste("The median income is $",median_income,
+            " with an interquartile range from $", Q1, " to $", Q3))
+# median income is $ 58440  with an interquartile range from $ 25190  to $ 110835
+
+#####################
+# 4) 
+#####################
+#set seed to 1234
+set.seed(1234)
+# seed set
+
+#create indices
+indices = sapply(rep(26680, 2),sample,size = 10)
+class(indices)
+dim(indices)
+#created and verified
+
+# subset NYC income and create a matrix
+subset = nyc$Income[indices]
+class(subset)
+matrix = matrix(subset, ncol = 2) 
+class(matrix)
+dim(matrix)
+#matrix created and verified
+
+#calculate mean using apply
+mean4 = round(apply(matrix, 2, mean))
+# means = $75922 and $146811
+
+#DELIVERABLE
+print(paste("the subset mean incomes are", mean4[1], "and", mean4[2]))
+
+#####################
+# 5)
+#####################
+
+#set seed
+set.seed(123)
+
+#create larger indices performed 1000 times
+indices5 = sapply(rep(26680, 1000),sample,size = 10)
+class(indices5)
+dim(indices5)
+#indices created and verified
+
+#subset with NYC income and calculate means
+subset5 = nyc$Income[indices5]
+matrix5 = matrix(subset5, ncol = 1000) 
+mean5 = apply(matrix5, 2, mean)
+#means calculated
+
+# DELIVERABLE: create histogram of sampling distribution of the mean
+hist(mean5,
+     main = "Sampling Distribution of the Mean",
+     breaks = 30,
+     xlim   = c(0, 250000),
+     xlab = "Mean Sample Income in USD")
+# histogram created
+
+#install and load moments package
+install.packages("moments")
+library(moments)
+
+#DELIVERABLE: calculate skew with moments 
+skew = skewness(mean5)
+print(paste("The skew is",skew))
+#skewness is found to be 1.52
+
+#####################
+# 6)
+#####################
+
+#Create the function 
+mySamplr = function(n, k) {
+  library(moments)
+  indices6 = sapply(rep(nrow(nyc), k), sample, size = n)
+  subset6 = nyc$Income[indices6]
+  matrix6 = matrix(subset6, ncol = k)
+  means6 = apply(matrix6, 2, mean)
+
+  hist(means6, 
+       xlim = c(0, 250000),
+       breaks = 30,
+       main="Sampling Distribution of the Mean")
+
+  skew = skewness(means6)
+
+  print(paste("Skewness of sampling distribution:", skew))
+}
+# function created using code from #5
+
+# Call the mySamplr 
+set.seed(123)   #replicates conditions of problem 5
+mySamplr(n=10,k=1000) 
+# yields same histogram and skew value (1.52) as problem 5, indicating the function is valid
+
+
+    
+    
+    
